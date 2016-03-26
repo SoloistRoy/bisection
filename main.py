@@ -18,26 +18,22 @@ for line in archivoEntrada:
     line = line.strip()
     columns = line.split() 
 
-    q1.append(float(columns[0]))
-    beta1.append(float(columns[1]))
-    q2.append(float(columns[2]))
-    beta2.append(float(columns[3]))
+    q1.append(float(columns[1]))
+    beta1.append(float(columns[0]))
+    q2.append(float(columns[3]))
+    beta2.append(float(columns[2]))
 
-beta = 2e-11
-q=40.0
+def soave( z , q , beta ):
+    return 1 + beta - z - ( (q * beta / z) * ( (z-beta) / (z+beta) ) )
 
-def f(z) :
-    return 1 + beta - z - (q * beta / z) * ( (z-beta) /(z+beta) )
-
-def imprimir( raiz , archivoSalida ) :
+def imprimir( raiz1 , raiz2 ) :
     archivo = open( sys.argv[2] , 'w' )
-    archivo.write( str( raiz ) + '\t' + str( f(raiz) ) + '\n' )
+    for i in range(len(raiz1)):
+        archivo.write( str( raiz1[i] ) + '\t' + str( raiz2[i] ) + '\n' )
     archivo.close() 
 
 for i in range( len(q1) ):
-    resultado1.append( biseccion.solucion( f1 , 0.1 , 2.0 ) ) 
-    
+    resultado1.append( biseccion.solucion( soave , 0.1 , 2.0 , q1[i] , beta1[i] ) ) 
+    resultado2.append(0)
 
-
-resultado = biseccion.solucion( f , 0.1 , 2.0 )
-imprimir( resultado, 'salida.txt' )
+imprimir( resultado1, resultado2 )    
